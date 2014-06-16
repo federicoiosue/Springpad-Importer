@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SpringpadNote {
 
-	public final String DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss"; // 2014-06-17T08:08:47+0000
+	public final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss"; // ex. 2014-06-17T08:08:47+0000
 
 	private String name;
 	private List<String> tags;
@@ -116,5 +116,9 @@ public class SpringpadNote {
 
 class Addresses {
 	private String address;
+
+	public String getAddress() {
+		return address;
+	}
 
 }

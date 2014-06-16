@@ -20,24 +20,30 @@ import com.google.gson.Gson;
 public class Importer {
 
 	private final static String JSON = "export.json";
-	private final static String OUTPUT = "springpad_export";
 
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		importer.doImport("/home/alfresco/Scaricati/federico.iosue-export.zip");
+//		importer.doImport("/home/alfresco/Scaricati/Contratti Fornitori test smistamento.zip");
+		List<SpringpadNote> list = importer.getSpringpadNotes();
+		for (SpringpadNote springpadNote : list) {
+			springpadNote.getCreated();
+		}
+		
 	}
 
 	private List<SpringpadNote> list;
 
 	public void doImport(String zipExport) {
 		File json = getJson(zipExport);
-		parseJson(json);
-
+		if (json != null) {
+			parseJson(json);
+		}
 	}
 
 	private File getJson(String zipExport) {
 		File json = null;
-		String output = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1) + OUTPUT;
+		String output = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1) + zipExport.substring(0, zipExport.lastIndexOf("."));
 		ZipUtils.unzip(zipExport, output);
 		try {
 			@SuppressWarnings("unchecked")

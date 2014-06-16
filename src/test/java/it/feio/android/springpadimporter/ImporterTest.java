@@ -8,8 +8,8 @@ public class ImporterTest {
 
 	@Test
 	public void test() {
-		Importer importer = new Importer();
-		importer.doImport(ZIP_PATH);
+//		Importer importer = new Importer();
+//		importer.doImport(ZIP_PATH);
 		// assertEquals(expected, actual);;
 	}
 
