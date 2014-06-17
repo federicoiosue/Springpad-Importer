@@ -2,6 +2,7 @@ package it.feio.android.springpadimporter.models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +21,18 @@ public class SpringpadNote {
 	private String type;
 	private String url; // same as image?
 	private float rating;
-	private List<String> notebooks;
-	private Addresses addresses;
+	private List<String> notebooks = new ArrayList<String>();
+	private SpringpadAddresses addresses;
 	private String created;
 	private String modified;
+	private List<SpringpadAttachment> attachments = new ArrayList<SpringpadAttachment>();
+	private List<SpringpadComment> comments = new ArrayList<SpringpadComment>();
 	// Wines
 	private String varietal; // "varietal":"Sangiovese",
 	private String wine_type; // "wine type":"Red Wine"
+	private String price;
+	private String region;
+	private String vintage;
 
 	public String getName() {
 		return name;
@@ -76,7 +82,7 @@ public class SpringpadNote {
 		return notebooks;
 	}
 
-	public Addresses getAddresses() {
+	public SpringpadAddresses getAddresses() {
 		return addresses;
 	}
 
@@ -112,13 +118,28 @@ public class SpringpadNote {
 		return wine_type;
 	}
 
-}
+	public String getDATE_FORMAT() {
+		return DATE_FORMAT;
+	}
 
-class Addresses {
-	private String address;
+	public List<SpringpadAttachment> getAttachments() {
+		return attachments;
+	}
 
-	public String getAddress() {
-		return address;
+	public List<SpringpadComment> getComments() {
+		return comments;
+	}
+
+	public String getPrice() {
+		return price;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public String getVintage() {
+		return vintage;
 	}
 
 }

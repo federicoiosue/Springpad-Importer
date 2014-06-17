@@ -1,5 +1,6 @@
 package it.feio.android.springpadimporter;
 
+import it.feio.android.springpadimporter.models.SpringpadAttachment;
 import it.feio.android.springpadimporter.models.SpringpadNote;
 import it.feio.android.springpadimporter.utils.ZipUtils;
 
@@ -24,34 +25,51 @@ public class Importer {
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		importer.doImport("/home/alfresco/Scaricati/federico.iosue-export.zip");
-//		importer.doImport("/home/alfresco/Scaricati/Contratti Fornitori test smistamento.zip");
 		List<SpringpadNote> list = importer.getSpringpadNotes();
 		for (SpringpadNote springpadNote : list) {
-			springpadNote.getCreated();
+			if (springpadNote.getImage() != null || springpadNote.getAttachments().size() > 0) {
+				System.out.println("\n");
+			}
+			
+			if (springpadNote.getImage() != null) {
+				System.out.println("Image: " + importer.getWorkingPath() + springpadNote.getImage());
+			}
+			for (SpringpadAttachment springpadAttachment : springpadNote.getAttachments()) {
+				if (springpadAttachment.getUrl().equals(springpadAttachment.getImage())) {
+					System.out.println("Image again!: " + importer.getWorkingPath() + springpadAttachment.getUrl());
+				} else {
+					System.out.println("Attachment: " + importer.getWorkingPath() + springpadAttachment.getUrl());
+				}
+			}
 		}
 		
 	}
 
 	private List<SpringpadNote> list;
+	private String outputTemporaryFolder;
+	private String workingPath;
 
 	public void doImport(String zipExport) {
 		File json = getJson(zipExport);
 		if (json != null) {
 			parseJson(json);
 		}
+		clean();
 	}
+	
 
 	private File getJson(String zipExport) {
 		File json = null;
-		String output = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1) + zipExport.substring(0, zipExport.lastIndexOf("."));
-		ZipUtils.unzip(zipExport, output);
+		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1) + zipExport.substring(0, zipExport.lastIndexOf("."));
+		ZipUtils.unzip(zipExport, outputTemporaryFolder);
 		try {
 			@SuppressWarnings("unchecked")
-			Iterator<File> i = FileUtils.listFiles(new File(output), FileFilterUtils.nameFileFilter(JSON),
+			Iterator<File> i = FileUtils.listFiles(new File(outputTemporaryFolder), FileFilterUtils.nameFileFilter(JSON),
 					TrueFileFilter.INSTANCE).iterator();
 			while (i.hasNext()) {
 				json = i.next();
 				if (json != null) {
+					setWorkingPath(json.getParent() + File.separator);
 					break;
 				}
 			}
@@ -68,7 +86,6 @@ public class Importer {
 		try {
 			br = new BufferedReader(new FileReader(json));
 			list = Arrays.asList(gson.fromJson(br, SpringpadNote[].class));
-			System.out.println(list);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,10 +97,19 @@ public class Importer {
 		return this.list;
 	}
 
-//	public List<Object> convert(List<Object> destination, String[] methods) {
-//		for (String method : methods) {
-//			
-//		}
-//		return destination;
-//	}
+	
+	public void clean() {
+		File folder = new File(outputTemporaryFolder);
+		folder.delete();
+	}
+
+
+	public String getWorkingPath() {
+		return workingPath;
+	}
+
+
+	public void setWorkingPath(String workingPath) {
+		this.workingPath = workingPath;
+	}
 }
