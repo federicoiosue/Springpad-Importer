@@ -27,6 +27,7 @@ public class SpringpadNote {
 	private String modified;
 	private List<SpringpadAttachment> attachments = new ArrayList<SpringpadAttachment>();
 	private List<SpringpadComment> comments = new ArrayList<SpringpadComment>();
+	private List<SpringpadItem> items = new ArrayList<SpringpadItem>();
 	// Wines
 	private String varietal; // "varietal":"Sangiovese",
 	private String wine_type; // "wine type":"Red Wine"
@@ -128,6 +129,10 @@ public class SpringpadNote {
 
 	public List<SpringpadComment> getComments() {
 		return comments;
+	}
+
+	public List<SpringpadItem> getItems() {
+		return items;
 	}
 
 	public String getPrice() {
