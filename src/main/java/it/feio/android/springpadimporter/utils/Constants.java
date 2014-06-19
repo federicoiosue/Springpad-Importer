@@ -11,8 +11,13 @@ public interface Constants {
 	public final static String TYPE_PRODUCT = "Product";
 	public final static String TYPE_PHOTO = "Photo";
 	public final static String TYPE_EVENT = "Event";
-	// public final static String TYPE_BUSINESS = "Business";
-	// public final static String TYPE_BUSINESS = "Business";
-	// public final static String TYPE_BUSINESS = "Business";
+	public final static String TYPE_VIDEO = "Video";
+	public final static String TYPE_TVSHOW = "TV Show";
+	public final static String TYPE_RECIPE = "Recipe";
+	public final static String TYPE_BOOK = "Book";
+	public final static String TYPE_WINE = "Wine";
+	public final static String TYPE_ALBUM = "Album";
+	public final static String TYPE_BOOKMARK = "Bookmark";
+	public final static String TYPE_BUSINESS = "Business";
 
 }

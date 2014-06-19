@@ -10,19 +10,24 @@ import com.google.gson.annotations.SerializedName;
 public class SpringpadElement implements Constants {
 
 	private String name;
-	private List<String> tags;
 	private String text;
+	private String description;
 	private boolean linked;
 	private boolean isPublic;
 	private String type;
 	private String url; // same as image?
 	private float rating;
-	private List<String> notebooks = new ArrayList<String>();
 	private SpringpadAddresses addresses;
 	private String created;
 	private String modified;
+	private List<String> tags = new ArrayList<String>();
+	private List<String> notebooks = new ArrayList<String>();
 	private List<SpringpadAttachment> attachments = new ArrayList<SpringpadAttachment>();
 	private List<SpringpadComment> comments = new ArrayList<SpringpadComment>();
+	// Album
+	private String artist;
+	// TV Shows
+	private List<String> cast = new ArrayList<String>();
 	// Business
 	@SerializedName("phone numbers")
 	SpringpadPhoneNumbers phoneNumbers;
@@ -39,13 +44,20 @@ public class SpringpadElement implements Constants {
 	// Products
 	private String category;
 	private String price;
-	private String description;
 	private String manufacturer;
 	// Wines
 	private String varietal; // "varietal":"Sangiovese",
 	private String wine_type; // "wine type":"Red Wine"
 	private String region;
 	private String vintage;
+	// Book
+	private String author;
+	private String isbn;
+	@SerializedName("publication date")
+	private String publicationDate;
+	// Recipes
+	private String ingredients;
+	private String directions;
 
 
 	public String getName() {
@@ -123,6 +135,11 @@ public class SpringpadElement implements Constants {
 	}
 
 
+	public String getArtist() {
+		return artist;
+	}
+
+
 	public Date getDate() {
 		return Utils.getDate(date);
 	}
@@ -135,11 +152,6 @@ public class SpringpadElement implements Constants {
 
 	public String getWine_type() {
 		return wine_type;
-	}
-
-
-	public String getDATE_FORMAT() {
-		return DATE_FORMAT;
 	}
 
 
@@ -158,6 +170,31 @@ public class SpringpadElement implements Constants {
 	}
 
 
+	public String getAuthor() {
+		return author;
+	}
+
+
+	public String getIsbn() {
+		return isbn;
+	}
+
+
+	public String getPublicationDate() {
+		return publicationDate;
+	}
+
+
+	public String getIngredients() {
+		return ingredients;
+	}
+
+
+	public String getDirections() {
+		return directions;
+	}
+
+
 	public String getPrice() {
 		return price;
 	}
@@ -170,6 +207,31 @@ public class SpringpadElement implements Constants {
 
 	public String getVintage() {
 		return vintage;
+	}
+
+
+	public List<String> getCast() {
+		return cast;
+	}
+
+
+	public SpringpadPhoneNumbers getPhoneNumbers() {
+		return phoneNumbers;
+	}
+
+
+	public String getCategory() {
+		return category;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public String getManufacturer() {
+		return manufacturer;
 	}
 
 }
