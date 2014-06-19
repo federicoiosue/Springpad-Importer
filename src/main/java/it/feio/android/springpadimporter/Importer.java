@@ -1,8 +1,8 @@
 package it.feio.android.springpadimporter;
 
 import it.feio.android.springpadimporter.models.SpringpadAttachment;
-import it.feio.android.springpadimporter.models.SpringpadNote;
-import it.feio.android.springpadimporter.utils.ZipUtils;
+import it.feio.android.springpadimporter.models.SpringpadElement;
+import it.feio.android.springpadimporter.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,13 +24,13 @@ public class Importer {
 
 	public static void main(String[] args) {
 		Importer importer = new Importer();
-		importer.doImport("/home/alfresco/Scaricati/federico.iosue-export.zip");
-		List<SpringpadNote> list = importer.getSpringpadNotes();
-		for (SpringpadNote springpadNote : list) {
+		importer.doImport("/home/fede/Scaricati/federico.iosue-export.zip");
+		List<SpringpadElement> list = importer.getSpringpadNotes();
+		for (SpringpadElement springpadNote : list) {
 			if (springpadNote.getImage() != null || springpadNote.getAttachments().size() > 0) {
 				System.out.println("\n");
 			}
-			
+			springpadNote.toString();
 			if (springpadNote.getImage() != null) {
 				System.out.println("Image: " + importer.getWorkingPath() + springpadNote.getImage());
 			}
@@ -45,7 +45,7 @@ public class Importer {
 		
 	}
 
-	private List<SpringpadNote> list;
+	private List<SpringpadElement> list;
 	private String outputTemporaryFolder;
 	private String workingPath;
 
@@ -61,7 +61,7 @@ public class Importer {
 	private File getJson(String zipExport) {
 		File json = null;
 		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1) + zipExport.substring(0, zipExport.lastIndexOf("."));
-		ZipUtils.unzip(zipExport, outputTemporaryFolder);
+		Utils.unzip(zipExport, outputTemporaryFolder);
 		try {
 			@SuppressWarnings("unchecked")
 			Iterator<File> i = FileUtils.listFiles(new File(outputTemporaryFolder), FileFilterUtils.nameFileFilter(JSON),
@@ -78,14 +78,15 @@ public class Importer {
 		}
 		return json;
 	}
+	
 
-	private List<SpringpadNote> parseJson(File json) {
+	private List<SpringpadElement> parseJson(File json) {
 		list = null;
 		Gson gson = new Gson();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(json));
-			list = Arrays.asList(gson.fromJson(br, SpringpadNote[].class));
+			list = Arrays.asList(gson.fromJson(br, SpringpadElement[].class));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,7 +94,7 @@ public class Importer {
 		return list;
 	}
 
-	public List<SpringpadNote> getSpringpadNotes() {
+	public List<SpringpadElement> getSpringpadNotes() {
 		return this.list;
 	}
 
