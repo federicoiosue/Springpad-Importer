@@ -19,6 +19,7 @@ public class Utils {
 	 * @return
 	 */
 	public static Date getDate(String date) {
+		if (date == null || date.length() == 0) return null;
 		SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
 		Date d;
 		try {
