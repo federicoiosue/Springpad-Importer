@@ -2,12 +2,14 @@ package it.feio.android.springpadimporter;
 
 import it.feio.android.springpadimporter.models.SpringpadAttachment;
 import it.feio.android.springpadimporter.models.SpringpadElement;
+import it.feio.android.springpadimporter.utils.Constants;
 import it.feio.android.springpadimporter.utils.Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
@@ -28,7 +30,7 @@ public class Importer {
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		try {
-			importer.doImport("/home/fede/Scaricati/federico.iosue-export.zip");
+			importer.doImport("/home/fede/Scaricati/federico.iosue-export(2).zip");
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,7 +53,7 @@ public class Importer {
 			}
 		}
 	}
-	
+
 
 	public void doImport(String zipExport) throws ImportException {
 		File json;
@@ -72,10 +74,10 @@ public class Importer {
 	private File getJson(String zipExport) throws Exception {
 		if (zipExport == null) throw new NullPointerException("zip is null");
 		File json = null;
-		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(File.separator) + 1)
-				+ zipExport.substring(0, zipExport.lastIndexOf("."));
+		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(".")) + "_"
+				+ Calendar.getInstance().getTimeInMillis();
 		try {
-			int a = 5/0;
+			int a = 5 / 0;
 			Utils.unzip(zipExport, outputTemporaryFolder);
 		} catch (Exception e) {
 			throw new ImportException("Error decompressing archive", e);
@@ -90,9 +92,7 @@ public class Importer {
 				break;
 			}
 		}
-		if (json == null) {
-			throw new ImportException("The file is not a Springpad export archive");
-		}
+		if (json == null) { throw new ImportException("The file is not a Springpad export archive"); }
 		return json;
 	}
 
@@ -125,5 +125,27 @@ public class Importer {
 
 	public void setWorkingPath(String workingPath) {
 		this.workingPath = workingPath;
+	}
+
+
+	public int getNotesCount() {
+		int count = 0;
+		for (SpringpadElement springpadElement : list) {
+			if (!springpadElement.getType().equals(Constants.TYPE_NOTEBOOK)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+
+	public int getNotebooksCount() {
+		int count = 0;
+		for (SpringpadElement springpadElement : list) {
+			if (springpadElement.getType().equals(Constants.TYPE_NOTEBOOK)) {
+				count++;
+			}
+		}
+		return count;
 	}
 }
