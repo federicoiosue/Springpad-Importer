@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -30,7 +31,7 @@ public class Importer {
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		try {
-			importer.doImport("/home/fede/Scaricati/federico.iosue-export(2).zip");
+			importer.doImport("/home/fede/Scaricati/federico.iosue-export(1).zip");
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,6 +53,12 @@ public class Importer {
 				}
 			}
 		}
+		try {
+			importer.clean();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -65,9 +72,7 @@ public class Importer {
 		} catch (Exception e) {
 			ImportException e1 = new ImportException(e.getMessage(), e);
 			throw e1;
-		} finally {
-			clean();
-		}
+		} 
 	}
 
 
@@ -77,7 +82,6 @@ public class Importer {
 		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(".")) + "_"
 				+ Calendar.getInstance().getTimeInMillis();
 		try {
-			int a = 5 / 0;
 			Utils.unzip(zipExport, outputTemporaryFolder);
 		} catch (Exception e) {
 			throw new ImportException("Error decompressing archive", e);
@@ -112,9 +116,9 @@ public class Importer {
 	}
 
 
-	public void clean() {
+	public void clean() throws IOException {
 		File folder = new File(outputTemporaryFolder);
-		folder.delete();
+		FileUtils.deleteDirectory(folder);
 	}
 
 
