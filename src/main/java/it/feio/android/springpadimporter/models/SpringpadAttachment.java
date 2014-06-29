@@ -8,15 +8,15 @@ public class SpringpadAttachment {
 	private String description;// audio
 
 	public String getImage() {
-		return image.trim();
+		return image;
 	}
 
 	public String getType() {
 		return type;
 	}
 
-	public String getUrl() {
-		return url.trim();
+	public String getUrl() {	
+		return url;
 	}
 
 	public float getDuration() {

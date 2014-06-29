@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import exceptions.ImportException;
 
 public class Importer {
@@ -31,7 +33,7 @@ public class Importer {
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		try {
-			importer.doImport("/home/fede/Scaricati/federico.iosue-export(1).zip");
+			importer.doImport("/home/fede/Scaricati/federico.iosue-export(last) (HUGE).zip");
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,12 +103,17 @@ public class Importer {
 	}
 
 
-	private List<SpringpadElement> parseJson(File json) throws FileNotFoundException {
-		List<SpringpadElement> list = null;
+	private List<SpringpadElement> parseJson(File json) throws IOException {
+		List<SpringpadElement> list = new ArrayList<SpringpadElement>();
 		Gson gson = new Gson();
-		BufferedReader br;
-		br = new BufferedReader(new FileReader(json));
-		list = Arrays.asList(gson.fromJson(br, SpringpadElement[].class));
+		JsonReader reader = new JsonReader(new FileReader(json));
+		reader.beginArray();
+		while (reader.hasNext()) {
+			SpringpadElement springpadElement = gson.fromJson(reader, SpringpadElement.class);
+			list.add(springpadElement);
+		}
+		reader.endArray();
+		reader.close();
 		return list;
 	}
 

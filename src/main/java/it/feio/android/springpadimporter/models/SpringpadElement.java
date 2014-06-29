@@ -71,12 +71,12 @@ public class SpringpadElement implements Constants {
 
 
 	public String getImage() {
-		return image.trim();
+		return image;
 	}
 
 
 	public String getText() {
-		return text.trim();
+		return text;
 	}
 
 
@@ -106,7 +106,7 @@ public class SpringpadElement implements Constants {
 
 
 	public String getUrl() {
-		return url.trim();
+		return url;
 	}
 
 
