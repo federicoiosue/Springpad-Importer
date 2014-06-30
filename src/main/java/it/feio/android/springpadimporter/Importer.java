@@ -4,13 +4,10 @@ import it.feio.android.springpadimporter.models.SpringpadAttachment;
 import it.feio.android.springpadimporter.models.SpringpadElement;
 import it.feio.android.springpadimporter.utils.Constants;
 import it.feio.android.springpadimporter.utils.Utils;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -142,7 +139,7 @@ public class Importer {
 	public int getNotesCount() {
 		int count = 0;
 		for (SpringpadElement springpadElement : list) {
-			if (!springpadElement.getType().equals(Constants.TYPE_NOTEBOOK)) {
+			if (!Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
 				count++;
 			}
 		}
@@ -153,7 +150,7 @@ public class Importer {
 	public int getNotebooksCount() {
 		int count = 0;
 		for (SpringpadElement springpadElement : list) {
-			if (springpadElement.getType().equals(Constants.TYPE_NOTEBOOK)) {
+			if (Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
 				count++;
 			}
 		}
