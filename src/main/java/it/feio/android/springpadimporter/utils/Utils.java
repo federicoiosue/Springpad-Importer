@@ -33,42 +33,6 @@ public class Utils {
 
 
 	/**
-	 * Unzip a file specifying source and destination
-	 * 
-	 * @param source
-	 * @param destination
-	 * @return
-	 */
-	public static File unzip(String source, String destination) {
-		return unzip(source, destination, null);
-	}
-
-
-	/**
-	 * Unzip a file specifying source, destination and password
-	 * 
-	 * @param source
-	 * @param destination
-	 * @param password
-	 * @return
-	 */
-	public static File unzip(String source, String destination, String password) {
-		File result = null;
-		try {
-			ZipFile zipFile = new ZipFile(source);
-			if (zipFile.isEncrypted()) {
-				zipFile.setPassword(password);
-			}
-			zipFile.extractAll(destination);
-			result = new File(destination);
-		} catch (ZipException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
-
-	/**
 	 * Uses reflection to get all the object fields
 	 * 
 	 * @param valueObj

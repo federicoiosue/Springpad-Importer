@@ -3,7 +3,6 @@ package it.feio.android.springpadimporter;
 import it.feio.android.springpadimporter.models.SpringpadAttachment;
 import it.feio.android.springpadimporter.models.SpringpadElement;
 import it.feio.android.springpadimporter.utils.Constants;
-import it.feio.android.springpadimporter.utils.Utils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import listeners.ZipProgressesListener;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.progress.ProgressMonitor;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -26,12 +28,20 @@ public class Importer {
 	private String outputTemporaryFolder;
 	private String workingPath;
 	private Integer notesCount, notebooksCount;
+	private ZipProgressesListener mZipProgressesListener;
+
+	private ProgressMonitor pm;
 
 
 	public static void main(String[] args) {
 		Importer importer = new Importer();
+		importer.setZipProgressesListener(new ZipProgressesListener() {			
+			public void onZipProgress(int progressPercentage) {
+				System.out.println(progressPercentage);
+			}
+		});
 		try {
-			importer.doImport("/home/fede/Scaricati/Tfdm-export (1).zip");
+			importer.doImport("/home/fede/Scaricati/federico.iosue-export(last).zip");
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,6 +70,11 @@ public class Importer {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	public void setZipProgressesListener(ZipProgressesListener listener) {
+		this.mZipProgressesListener = listener;
+	}
 
 
 	public void doImport(String zipExport) throws ImportException {
@@ -82,7 +97,11 @@ public class Importer {
 		outputTemporaryFolder = zipExport.substring(0, zipExport.lastIndexOf(".")) + "_"
 				+ Calendar.getInstance().getTimeInMillis();
 		try {
-			Utils.unzip(zipExport, outputTemporaryFolder);
+			ZipFile zipFile = new ZipFile(zipExport);
+			if (mZipProgressesListener != null) {
+				keepProgressUpdated(zipFile);
+			}
+			zipFile.extractAll(outputTemporaryFolder);
 		} catch (Exception e) {
 			throw new ImportException("Error decompressing archive", e);
 		}
@@ -98,6 +117,28 @@ public class Importer {
 		}
 		if (json == null) { throw new ImportException("The file is not a Springpad export archive"); }
 		return json;
+	}
+
+
+	private void keepProgressUpdated(ZipFile zipFile) {
+		pm = zipFile.getProgressMonitor();
+		Thread t = new Thread() {
+			private int percentPrevious;
+			private int percentDone;
+			public void run() {
+				while (percentDone != 100) {
+					percentDone = pm.getPercentDone();
+					if (percentDone != percentPrevious) {
+						mZipProgressesListener.onZipProgress(percentDone);
+						percentPrevious = percentDone;
+					}
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {}
+				}
+			}
+		};
+		t.start();
 	}
 
 
@@ -172,6 +213,11 @@ public class Importer {
 			this.notebooksCount = getNotebooks().size();
 		}
 		return this.notebooksCount;
+	}
+	
+	
+	public int getUnzipPercentage() {
+		return pm.getPercentDone();
 	}
 
 }
