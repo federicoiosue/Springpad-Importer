@@ -25,6 +25,7 @@ public class Importer {
 	private List<SpringpadElement> list;
 	private String outputTemporaryFolder;
 	private String workingPath;
+	private Integer notesCount, notebooksCount;
 
 
 	public static void main(String[] args) {
@@ -71,7 +72,7 @@ public class Importer {
 		} catch (Exception e) {
 			ImportException e1 = new ImportException(e.getMessage(), e);
 			throw e1;
-		} 
+		}
 	}
 
 
@@ -137,23 +138,40 @@ public class Importer {
 
 
 	public List<SpringpadElement> getNotes() {
-		List<SpringpadElement> list = new ArrayList<SpringpadElement>();
-		for (SpringpadElement springpadElement : list) {
+		List<SpringpadElement> notes = new ArrayList<SpringpadElement>();
+		for (SpringpadElement springpadElement : this.list) {
 			if (!Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
-				list.add(springpadElement);
+				notes.add(springpadElement);
 			}
 		}
-		return list;
+		return notes;
 	}
 
 
 	public List<SpringpadElement> getNotebooks() {
-		List<SpringpadElement> list = new ArrayList<SpringpadElement>();
-		for (SpringpadElement springpadElement : list) {
+		List<SpringpadElement> notebooks = new ArrayList<SpringpadElement>();
+		for (SpringpadElement springpadElement : this.list) {
 			if (Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
-				list.add(springpadElement);
+				notebooks.add(springpadElement);
 			}
 		}
-		return list;
+		return notebooks;
 	}
+
+
+	public int getNotesCount() {
+		if (this.notesCount == null) {
+			this.notesCount = getNotes().size();
+		}
+		return this.notesCount;
+	}
+
+
+	public int getNotebooksCount() {
+		if (this.notebooksCount == null) {
+			this.notebooksCount = getNotebooks().size();
+		}
+		return this.notebooksCount;
+	}
+
 }
