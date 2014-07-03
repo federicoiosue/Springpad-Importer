@@ -30,7 +30,7 @@ public class Importer {
 	public static void main(String[] args) {
 		Importer importer = new Importer();
 		try {
-			importer.doImport("/home/fede/Scaricati/federico.iosue-export(last) (HUGE).zip");
+			importer.doImport("/home/fede/Scaricati/Tfdm-export (1).zip");
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,24 +136,24 @@ public class Importer {
 	}
 
 
-	public int getNotesCount() {
-		int count = 0;
+	public List<SpringpadElement> getNotes() {
+		List<SpringpadElement> list = new ArrayList<SpringpadElement>();
 		for (SpringpadElement springpadElement : list) {
 			if (!Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
-				count++;
+				list.add(springpadElement);
 			}
 		}
-		return count;
+		return list;
 	}
 
 
-	public int getNotebooksCount() {
-		int count = 0;
+	public List<SpringpadElement> getNotebooks() {
+		List<SpringpadElement> list = new ArrayList<SpringpadElement>();
 		for (SpringpadElement springpadElement : list) {
 			if (Constants.TYPE_NOTEBOOK.equals(springpadElement.getType())) {
-				count++;
+				list.add(springpadElement);
 			}
 		}
-		return count;
+		return list;
 	}
 }
