@@ -24,6 +24,8 @@ public class SpringpadElement implements Constants {
 	private List<String> notebooks = new ArrayList<String>();
 	private List<SpringpadAttachment> attachments = new ArrayList<SpringpadAttachment>();
 	private List<SpringpadComment> comments = new ArrayList<SpringpadComment>();
+	// Videos
+	private List<String> videos = new ArrayList<String>();
 	// Album
 	private String artist;
 	// TV Shows
@@ -58,7 +60,7 @@ public class SpringpadElement implements Constants {
 	// Recipes
 	private String ingredients;
 	private String directions;
-
+	
 
 	public String getName() {
 		return name;
@@ -232,6 +234,11 @@ public class SpringpadElement implements Constants {
 
 	public String getManufacturer() {
 		return manufacturer;
+	}
+
+
+	public List<String> getVideos() {
+		return videos;
 	}
 
 }
