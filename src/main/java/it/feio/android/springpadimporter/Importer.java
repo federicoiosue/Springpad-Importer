@@ -1,6 +1,6 @@
 package it.feio.android.springpadimporter;
 
-import it.feio.android.springpadimporter.models.SpringpadAttachment;
+import it.feio.android.springpadimporter.models.SpringpadComment;
 import it.feio.android.springpadimporter.models.SpringpadElement;
 import it.feio.android.springpadimporter.utils.Constants;
 import java.io.File;
@@ -41,27 +41,77 @@ public class Importer {
 			}
 		});
 		try {
-			importer.doImport("/home/fede/Scaricati/federico.iosue-export(last).zip");
+//			importer.doImport("/home/fede/Scaricati/federico.iosue-export(last).zip");
+//			importer.doImport("/home/fede/Scaricati/Tfdm-export (1).zip");
+			importer.doImport("/home/fede/Scaricati/My_Springpad_Export.zip");
+			
 		} catch (ImportException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		List<SpringpadElement> list = importer.getSpringpadNotes();
-		for (SpringpadElement springpadNote : list) {
-			if (springpadNote.getImage() != null || springpadNote.getAttachments().size() > 0) {
-				System.out.println("\n");
+		
+		for (SpringpadElement springpadElement : importer.getNotes()) {
+
+			StringBuilder content = new StringBuilder();
+
+			if (springpadElement.getType() == null) {
+				continue;
 			}
-			springpadNote.toString();
-			if (springpadNote.getImage() != null) {
-				System.out.println("Image: " + importer.getWorkingPath() + springpadNote.getImage());
-			}
-			for (SpringpadAttachment springpadAttachment : springpadNote.getAttachments()) {
-				if (springpadAttachment.getUrl().equals(springpadAttachment.getImage())) {
-					System.out.println("Image again!: " + importer.getWorkingPath() + springpadAttachment.getUrl());
-				} else {
-					System.out.println("Attachment: " + importer.getWorkingPath() + springpadAttachment.getUrl());
+			
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_VIDEO)) {
+				try {
+					content.append(System.getProperty("line.separator")).append(springpadElement.getVideos().get(0));
+				} catch (IndexOutOfBoundsException e ) {
+					content.append(System.getProperty("line.separator")).append(springpadElement.getUrl());
 				}
 			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_TVSHOW)) {
+				content.append(System.getProperty("line.separator")).append(springpadElement.getCast());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_BOOK)) {
+				content.append(System.getProperty("line.separator")).append("Author: ")
+						.append(springpadElement.getAuthor()).append(System.getProperty("line.separator"))
+						.append("Publication date: ").append(springpadElement.getPublicationDate());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_RECIPE)) {
+				content.append(System.getProperty("line.separator")).append("Ingredients: ")
+						.append(springpadElement.getIngredients()).append(System.getProperty("line.separator"))
+						.append("Directions: ").append(springpadElement.getDirections());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_BOOKMARK)) {
+				content.append(System.getProperty("line.separator")).append(springpadElement.getUrl());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_BUSINESS)
+					&& springpadElement.getPhoneNumbers() != null) {
+				content.append(System.getProperty("line.separator")).append("Phone number: ")
+						.append(springpadElement.getPhoneNumbers().getPhone());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_PRODUCT)) {
+				content.append(System.getProperty("line.separator")).append("Category: ")
+						.append(springpadElement.getCategory()).append(System.getProperty("line.separator"))
+						.append("Manufacturer: ").append(springpadElement.getManufacturer())
+						.append(System.getProperty("line.separator")).append("Price: ")
+						.append(springpadElement.getPrice());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_WINE)) {
+				content.append(System.getProperty("line.separator")).append("Wine type: ")
+						.append(springpadElement.getWine_type()).append(System.getProperty("line.separator"))
+						.append("Varietal: ").append(springpadElement.getVarietal())
+						.append(System.getProperty("line.separator")).append("Price: ")
+						.append(springpadElement.getPrice());
+			}
+			if (springpadElement.getType().equals(SpringpadElement.TYPE_ALBUM)) {
+				content.append(System.getProperty("line.separator")).append("Artist: ")
+						.append(springpadElement.getArtist());
+			}
+			for (SpringpadComment springpadComment : springpadElement.getComments()) {
+				content.append(System.getProperty("line.separator")).append(springpadComment.getCommenter())
+						.append(" commented at 0").append(springpadComment.getDate()).append(": ")
+						.append(springpadElement.getArtist());
+			}
+
+			System.out.println(content);
+
 		}
 		try {
 			importer.clean();
